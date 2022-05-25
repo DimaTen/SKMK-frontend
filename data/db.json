@@ -1,0 +1,28 @@
+{
+  "posts": [
+    {
+      "id": 1,
+      "email": "",
+      "firstName": "",
+      "lastName": "",
+      "phoneNumber": "",
+      "grade": ""
+    },
+    {
+      "id": 2,
+      "firstName": "Erika",
+      "lastName": "Ohlsson",
+      "email": "erika@com",
+      "phoneNumber": "0701234556",
+      "grade": "P0"
+    },
+    {
+      "id": 4,
+      "email": "peter@com",
+      "firstName": "Peter",
+      "lastName": "Ohlsson",
+      "phoneNumber": "0701234556",
+      "grade": "P1"
+    }
+  ]
+}
