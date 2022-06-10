@@ -2,17 +2,19 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
-import { StoreProvider } from 'easy-peasy';
-import store from './store';
+import { AuthProvider } from './context/AuthProvider';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+
 
 ReactDOM.render(
   <React.StrictMode>
-    <StoreProvider store={store}>
-      <Router>
-        <Route path="/" component={App} />
-      </Router>
-    </StoreProvider>
+    <BrowserRouter>
+      <AuthProvider>
+        <Routes>
+          <Route path="/*" element={<App />} />
+        </Routes>
+      </AuthProvider>
+    </BrowserRouter>
   </React.StrictMode>,
   document.getElementById('root')
 );

@@ -9,14 +9,11 @@ import Unauthorized from './components/Unauthorized';
 import Lounge from './components/Lounge';
 import LinkPage from './components/LinkPage';
 import RequireAuth from './components/RequireAuth';
+import Students from './components/Students';
 import { Routes, Route } from 'react-router-dom';
 import StudentsHome from './components/StudentsHome';
 import NewStudent from './components/NewStudent';
 import Attendance from './components/Attendance';
-
-import Grading from './Grading';
-import StudentPage from './components/StudentPage';
-import 'bootstrap/dist/css/bootstrap.min.css';
 
 const ROLES = {
     'USER': "ROLE_USER",
@@ -28,7 +25,7 @@ function App() {
 
 
   return (
-<Routes>
+    <Routes>
         <Route path="/" element={<Layout />}>
             {/* public routes */}
             <Route path="login" element={<Login />} />
@@ -37,7 +34,7 @@ function App() {
             <Route path="unauthorized" element={<Unauthorized />} />
 
             {/* we want to protect these routes */}
-            <Route > {/* element={<RequireAuth allowedRoles={[ROLES.USER]} />} */}
+            <Route element={<RequireAuth allowedRoles={[ROLES.USER]} />}>
                 <Route path="/" element={<Home />} />
             </Route>
 
@@ -55,26 +52,11 @@ function App() {
             </Route>
 
             {/* Students */}
-            <Route  >  
-                <Route > {/* element={<RequireAuth allowedRoles={[ROLES.USER]} />} */}
-                    <Route path="students" element={<StudentsHome />} />
-                    <Route path="students/add" element={<NewStudent />} />
-                    <Route path="students/student/:id" element={<StudentPage />} />
-                    <Route path="students/student/add" element={<NewStudent />} />
-                <Route>
-                    
+            <Route>              
+                <Route path="students" element={<StudentsHome />} />
+                <Route path="students/add" element={<NewStudent />} />
+                <Route path="attendance" element={<Attendance />} />
             </Route>
-                    
-                </Route> 
-          
-                
-            </Route>
-            <Route>  {/* Protect with Role */} 
-                    <Route path="attendance" element={<Attendance />} />    
-            </Route> 
-            <Route>  {/* Protect with Role */} 
-                    <Route path="grading" element={<Grading />} />    
-            </Route> 
 
 
 
