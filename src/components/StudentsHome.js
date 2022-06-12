@@ -28,10 +28,10 @@ const StudentsHome = () => {
                 const response = await api.get('/student/getAll')
                 setStudents(response.data);
             } catch (err) {
-                if (err.resonse) {
-                    console.log(err.resonse.data);
-                    console.log(err.resonse.status);
-                    console.log(err.resonse.headers);
+                if (err.response) {
+                    console.log(err.response.data);
+                    console.log(err.response.status);
+                    console.log(err.response.headers);
                   } else {
                     console.log(`Error: ${err.message}`)
                   }            

@@ -35,7 +35,7 @@ const NewStudent = () => {
 
 
   return (
-    <div>
+    <div className="formContainer">
         <form className="postForm" onSubmit={handleSubmit}>
             <label htmlFor="studentFirstName">First name:</label>
             <input

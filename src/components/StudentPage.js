@@ -58,6 +58,7 @@ const StudentPage = () => {
                         <button onClick={() => handleDelete(student.studentId)}>
                             Delete 
                         </button>
+                        
                     </>
                 }
                 {!student &&

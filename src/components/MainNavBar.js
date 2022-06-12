@@ -21,6 +21,7 @@ const MainNavBar = () => {
                 </NavDropdown>
                 <Nav.Link href="/attendance">Attendance</Nav.Link>
                 <Nav.Link href="/curriculum">Curriculum</Nav.Link>
+                <Nav.Link href="/instructors">Instructors</Nav.Link>
 
                 </Nav>
             </Navbar.Collapse>
