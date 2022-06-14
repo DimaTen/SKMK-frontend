@@ -1,159 +1,110 @@
-import { useState, useEffect } from "react";
-import { faCheck, faTimes, faInfoCircle } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import axios from '../api/axios';
-import { useParams } from "react-router-dom";
+import {useRef, useState, useEffect } from "react";
+import { useParams, Link } from "react-router-dom";
+import UserService from "../services/user.service";
 
-const EditInstructor = (instructors) => {
-    const[editUsername, setEditUsername] = useState([]);
+
+const EditInstructor = ({users}) => {
+    const { id } = useParams();
+    const instructor = users.find(user => (user.id).toString() === id);
+
+    const[editUsername, setEditUsername] = useState('');
     const[editFirstname, setEditFirstname] = useState('');
     const[editLastname, setEditLastname] = useState('');
     const[editEmail, setEditEmail] = useState('');
     const[editGrade, setEditGrade] = useState('');
     const[editPhone, setEditPhone] = useState('');
     const[editPassword, setEditPassword] = useState('');
+    const [errMsg, setErrMsg] = useState('');
+
+    const errRef = useRef();
+
+
+
+    useEffect(() => {
+        if(instructor) {
+            setEditUsername(instructor.username)
+            setEditFirstname(instructor.firstname)
+            setEditLastname(instructor.lastname)
+            setEditEmail(instructor.email)
+            setEditGrade(instructor.grade)
+            setEditPassword(instructor.password)
+            setEditPhone(instructor.phoneNumber)
+        }
+    }, [editUsername, editPassword, editFirstname, editLastname, editGrade, editPhone])
 
     
     const handleGradeChange = (e) => {
         setEditGrade(e.target.value)
     }
 
-    const { id } = useParams();
-    const instructor = instructors.find(instructor => (instructor.id).toString() === id);
+
 
     const handleEdit = async (id) => {
-
-        try {
-            const response = await axios.put(REGISTER_URL,
-                JSON.stringify({ username: editUsername, 
-                    password: password, 
-                    email: editEmail, 
-                    firstname: editFirstname, 
-                    lastname: editLastname,
-                    grade: editGrade,
-                    phoneNumber: editPhone, 
-                    roles: "USER"}),
-                {
-                    headers: { 'Content-Type': 'application/json' },
-                    withCredentials: true
+        await UserService.updateInstructor(id, JSON.stringify({ username: editUsername, 
+            password: editPassword, 
+            email: editEmail, 
+            firstname: editFirstname, 
+            lastname: editLastname,
+            grade: editGrade,
+            phoneNumber: editPhone, 
+            roles: "INSTRUCTOR"}),).then(() => {
+                setEditUsername('');
+                setEditFirstname('');
+                setEditLastname('');
+                setEditEmail('');
+                setEditGrade('');
+                setEditPhone('');
+                setEditPassword('');
+            }, (err) => {
+                if (!err?.response) {
+                    setErrMsg('No Server Response');
+                } else if (err.response?.status === 409) {
+                    setErrMsg('Username Taken');
+                } else {
+                    setErrMsg('Registration Failed')
                 }
-            );
-            console.log(response?.data);
-            console.log(response?.accessToken);
-            console.log(JSON.stringify(response));
-            setEditUsername('');
-            setEditFirstname('');
-            setEditLastname('');
-            setEditEmail('');
-            setEditGrade('G1');
-            setEditPhone('');
-            setEditPassword('');
-
-        }catch (err) {
-            if (!err?.response) {
-                setErrMsg('No Server Response');
-            } else if (err.response?.status === 409) {
-                setErrMsg('Username Taken');
-            } else {
-                setErrMsg('Registration Failed')
-            }
-            errRef.current.focus();
-            }
-        }
+                errRef.current.focus();
+            })
+    }
+        
 
 
 
   return (
   <main className="MainContent">
+    {editUsername &&
+    <>
+        <h2>Edit Post</h2>
+        <form className="newPostForm" onSubmit={(e) => e.preventDefault()}>
+            <label htmlFor="postTitle">Username:</label>
+            <input
+                id="postTitle"
+                type="text"
+                required
+                value={editUsername}
+                onChange={(e) => setEditUsername(e.target.value)}
+            />
+            <label htmlFor="postBody">Email:</label>
+            <input
+                id="postBody"
+                required
+                value={editEmail}
+                onChange={(e) => setEditEmail(e.target.value)}
+            />
+            <button type="submit" onClick={() => handleEdit(instructor.id)}>Submit</button>
+        </form>
+    </>
+}
+{!editUsername &&
+    <>
+        <h2>Post Not Found</h2>
+        <p>Well, that's disappointing.</p>
+        <p>
+            <Link to='/'>Visit Our Homepage</Link>
+        </p>
+    </>
+}
 
-                <section>
-                    <h1>Register new instructor</h1>
-                    <form className= "postForm" onSubmit={handleEdit}>
-                    <label htmlFor="username">
-                            Username:
-                        </label>
-                        <input
-                            type="text"
-                            id="username"
-                            autoComplete="off"
-                            onChange={(e) => setEditUsername(e.target.value)}
-                            value={username}                      
-
-                        />
-                        
-                        <label htmlFor="email">
-                            Email:
-                        </label>
-                        <input
-                            type="text"
-                            id="email"
-                            autoComplete="off"
-                            onChange={(e) => setEditEmail(e.target.value)}                           
-                            value={email}                          
-                        />
-
-                        <label htmlFor="grade">
-                            Grade:
-                        </label>
-                        <select value={grade} onChange={handleGradeChange}>
-                            <option value="G1">Graduate 1</option>
-                            <option value="G2">Graduate 2</option>
-                            <option value="G3">Graduate 3</option>
-                            <option value="G4">Graduate 4</option>
-                            <option value="G5">Graduate 5</option>
-                        </select>
-
-                        <label htmlFor="firstname">
-                            First name:      
-                        </label>
-                        <input
-                            type="text"
-                            id="firstname"
-                            autoComplete="off"
-                            onChange={(e) => setEditFirstname(e.target.value)}
-                            value={firstname}                        
-                        />
-
-                        <label htmlFor="lastname">
-                            Last name:
-                        </label>
-                        <input
-                            type="text"
-                            id="lastname"
-                            autoComplete="off"
-                            onChange={(e) => setEditLastname(e.target.value)}
-                            value={lastname}                        
-                        />
-                       
-                        <label htmlFor="phonenumber">
-                            Phone number:
-                        </label>
-                        <input
-                            type="text"
-                            id="phonenumber"
-                            autoComplete="off"
-                            onChange={(e) => setEditPhone(e.target.value)}
-                            value={phoneNumber}                            
-                        />
-
-                        <label htmlFor="password">
-                            Password:
-                        </label>
-                        <input
-                            type="password"
-                            id="password"
-                            onChange={(e) => setEditPassword(e.target.value)}
-                            value={password}                      
-                        />
-
-                        <label htmlFor="confirm_pwd">
-                            Confirm Password:
-                        </label>
-
-                        <button type="submit" onClick={() => handleEdit(instructor.id)}>Submit</button>
-                    </form>
-                </section>
-          
         </main>
   )
 }

@@ -1,76 +1,64 @@
-import React from 'react'
-import StudentsFeed from '../components/StudentsFeed';
+import Accordion from 'react-bootstrap/Accordion'
+import { Link } from 'react-router-dom'
 import { useState, useEffect } from 'react';
-import { Routes, Route, Link, Outlet, useNavigate } from 'react-router-dom';
-import  useAxiosFetch from '../hooks/useAxiosFetch';
-import useWindowSize from '../hooks/useWindowSize';
-import api from '../api/axios';
-import StudentPage from './StudentPage';
+
+import UserService from "../services/user.service";
+import EventBus from "../common/EventBus";
+
+const StudentsHome = ({ users, search, setSearch, searchResults, setSearchResults}) => {
 
 
-const StudentsHome = () => {
-    const { data, fetchError, isLoading } = useAxiosFetch('http://localhost:8080/student/getAll');
 
-    const [students, setStudents] = useState([]);
-    const [search, setSearch] = useState('');
-    const [searchResults, setSearchResults] = useState([]);
-    const [studentFirstName,setStudentFirstName] = useState('');
-    const [studentLastName,setStudentLastName] = useState('');
-    const [studentEmail,setStudentEmail] = useState('');
-    const [studentPhoneNumber,setStudentPhoneNumber] = useState('');
-    const [studentGrade,setStudentGrade] = useState('');
-    const navigate = useNavigate();
-    const { width } = useWindowSize();
 
     useEffect(() => {
-        const fetchStudents = async () => {
-            try {
-                const response = await api.get('/student/getAll')
-                setStudents(response.data);
-            } catch (err) {
-                if (err.response) {
-                    console.log(err.response.data);
-                    console.log(err.response.status);
-                    console.log(err.response.headers);
-                  } else {
-                    console.log(`Error: ${err.message}`)
-                  }            
-            }
-        }
-        fetchStudents();
-    }, [])
-
-    useEffect(() => {
-        const filteredResults = students.filter((student) => 
-        ((student.email).toLowerCase()).includes(search.toLowerCase()) ||
-        ((student.firstName).toLowerCase()).includes(search.toLowerCase()) ||
-        ((student.lastName).toLowerCase()).includes(search.toLowerCase()) ||
+        const filteredResults = users.filter((student) => 
+        student.title === "Student" &&
+        (((student.email).toLowerCase()).includes(search.toLowerCase()) ||
+        ((student.firstname).toLowerCase()).includes(search.toLowerCase()) ||
+        ((student.lastname).toLowerCase()).includes(search.toLowerCase()) ||
         ((student.phoneNumber).toLowerCase()).includes(search.toLowerCase()) ||
-        ((student.grade).toLowerCase()).includes(search.toLowerCase()));
+        ((student.grade).toLowerCase()).includes(search.toLowerCase())));
         setSearchResults(filteredResults.reverse());
-    }, [students, search])
+    }, [users, search])
 
-
-
-  return (
-    <main className="MainContent">
-        <form className="searchForm" onSubmit={(e) => e.preventDefault()}>
-            <label htmlFor="search">Search student</label>
+  
+    return (
+      <main className='InstructorsPage'>
+        
+            <form className="searchForm" onSubmit={(e) => e.preventDefault()}>
+                <label htmlFor="search">Search Posts</label>
                 <input
                     id="search"
                     type="text"
-                    placeholder="Search student"
+                    placeholder="Search Posts"
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                 />
-        </form>
-            
-        {isLoading && <p className="statusMsg">Loading posts...</p>}
-        {!isLoading && fetchError && <p className="statusMsg" style={{ color: "red" }}>{fetchError}</p>}
-        {!isLoading && !fetchError && (searchResults.length ? <StudentsFeed students={searchResults} /> : <p className="statusMsg">No posts to display.</p>)}
+            </form>
 
+      {searchResults.map(student => (
+      <Accordion key={student.id} student={student} > 
+          <Accordion.Item eventKey="0">
+          <Accordion.Header>{student.firstname} {student.lastname}</Accordion.Header>
+          <Accordion.Body>
+          <Link to={`/students/student/${student.id}`}>
+                  <h3>Grade: {student.grade}</h3>
+                  <p>Username: {student.username} </p>
+                  <p>Email: {student.email}</p>
+                  <p>Phone: {student.phoneNumber}</p>
+                  <p>Password: {student.password}</p>
+                  
+          </Link>
+          </Accordion.Body>
+        </Accordion.Item>
+  
+      </Accordion>
+        ))}
+     
+
+      
     </main>
-  )
-}
+    );
+  };
 
 export default StudentsHome

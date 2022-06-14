@@ -1,43 +1,36 @@
 import React, { useEffect, useState } from 'react'
-useParams
-import api from '../api/axios';
+import { useParams, Link, useNavigate } from "react-router-dom";
+import UserService from "../services/user.service";
+import EventBus from "../common/EventBus";
 
-const Instructor = () => {
-    const[instructors, setInstructors] = useState([]);
+const Instructor = ({ users, setUsers }) => {
     const navigate = useNavigate();
 
 
-    useEffect(() => {
-        const fetchInstructors = async () => {
-            try {
-                const response = await api.get('/instructors/show-all')
-                setInstructors(response.data);
-            } catch (error) {
-                if(error.response.data) {
-                console.log(error.response.status);
-                console.log(error.response.headers);
-                } else {
-                console.log(`Error: ${error.message}`)
-                }
-            }  
-        }
-        fetchInstructors();
-    }, [])
-
-
     const handleDelete = async (id) => {
-        try {
-            await api.delete(`/instructors/instructor/${id}`);
-            const instructorsList = instructors.filter(instructor => instructor.id !== id);
-            setInstructors(instructorsList);
-            navigate('/instructors');
-        } catch (err) {
-            console.log(`Error: ${err.message}`);
-        }
+        await UserService.deleteInstructor(id).then(() => {
+            const instructorsList = users.filter(instructor => instructor.id != id);
+            setUsers(instructorsList)
+            navigate("/instructors");
+        }, (error) => {
+            const _users =
+              (error.response &&
+                error.response.data &&
+                error.response.data.message) ||
+              error.message ||
+              error.toString();
+    
+            if (error.response && error.response.status === 401) {
+              EventBus.dispatch("logout");
+            }
+          }
+           
+              
+        )
     }
 
     const { id } = useParams();
-    const instructor = instructors.find(instructor => (instructor.id).toString() === id);
+    const instructor = users.find(instructor => (instructor.id).toString() === id);
 
   return (
     <main className="PostPage">

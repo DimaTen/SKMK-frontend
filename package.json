@@ -9,6 +9,7 @@
     "axios": "^0.19.2",
     "bootstrap": "^4.6.1",
     "easy-peasy": "^5.0.4",
+    "moment": "^2.29.3",
     "react": "^17.0.2",
     "react-bootstrap": "^2.4.0",
     "react-dom": "^17.0.2",

@@ -1,6 +1,8 @@
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useState, useEffect } from 'react';
 import api from '../api/axios';
+import UserService from "../services/user.service";
+import EventBus from "../common/EventBus";
 
 const StudentPage = () => {
 
@@ -9,53 +11,69 @@ const StudentPage = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const fetchStudents = async () => {
-            try {
-                const response = await api.get('/student/getAll')
-                setStudents(response.data);
-            } catch (err) {
-                if (err.resonse) {
-                    console.log(err.resonse.data);
-                    console.log(err.resonse.status);
-                    console.log(err.resonse.headers);
-                  } else {
-                    console.log(`Error: ${err.message}`)
-                  }            
+        UserService.getStudentBoard().then(
+          (response) => {
+              setStudents(response.data);
+          },
+          (error) => {
+            const _students =
+              (error.response &&
+                error.response.data &&
+                error.response.data.message) ||
+              error.message ||
+              error.toString();
+    
+              setStudents(_students);
+    
+            if (error.response && error.response.status === 401) {
+              EventBus.dispatch("logout");
             }
-        }
-        fetchStudents();
-    }, [])
+          }
+        );
+      }, []);
 
     const handleDelete = async (id) => {
-        try {
-            await api.delete(`/student/${id}`);
-            const studentsList = students.filter(student => student.student_id !== id);
-            setStudents(studentsList);
-            navigate('/students');
-        } catch (err) {
-            console.log(`Error: ${err.message}`);
-        }
+        await UserService.deleteStudentRequest(id).then(() => {
+            const studentsList = students.filter(student => student.id != id);
+            setStudents(studentsList)
+            navigate("/students");
+        }, (error) => {
+            const _students =
+              (error.response &&
+                error.response.data &&
+                error.response.data.message) ||
+              error.message ||
+              error.toString();
+    
+            if (error.response && error.response.status === 401) {
+              EventBus.dispatch("logout");
+            }
+          }
+           
+              
+        )
     }
 
 
 
 
     const { id } = useParams();
-    const student = students.find(student => (student.studentId).toString() === id);
+    const student = students.find(student => (student.id) == id);
     // const student = students.find(student => (student.studentId).toString() === id);
     return (
         <main className="PostPage">
             <article className="post">
                 {student &&
                     <>
-                        <h2>{student.firstName} {student.lastName}</h2>
+                        <h2>{student.firstname} {student.lastname}</h2>
                         <p className="postBody">
-                            Id: {student.studentId} <br/>
+                            Id: {student.id} <br/>
                             Email: {student.email} <br/>
                             Phone: {student.phoneNumber}<br/>
                             Grade: {student.grade}                       
                         </p>
-                        <button onClick={() => handleDelete(student.studentId)}>
+                        <Link to={`/students/student/edit/${student.id}`}><button className="editButton">Update</button></Link>
+                        <button onClick={() => handleDelete(student.id)}>
                             Delete 
                         </button>
                         

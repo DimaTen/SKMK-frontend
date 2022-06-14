@@ -1,10 +1,15 @@
 import { Outlet } from "react-router-dom"
-import MainNavBar from "./MainNavBar"
 
-const Layout = () => {
+import NavbarMain from "./NavbarMain"
+
+const Layout = ({ showInstructorBoard, showAdminBoard, currentUser, logOut }) => {
     return (
         <div className="App">
-            <MainNavBar />
+            <NavbarMain               
+              showInstructorBoard={showInstructorBoard}
+              showAdminBoard={showAdminBoard}
+              currentUser={currentUser}
+              logOut={logOut} />
                 
             <Outlet />
         </div>
