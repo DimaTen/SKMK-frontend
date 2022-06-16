@@ -116,7 +116,7 @@ const App = () => {
 
 
   return (
-    <div>
+    <container>
         <Routes>
         <Route path="/" element={<Layout
               showInstructorBoard={showInstructorBoard}
@@ -160,7 +160,7 @@ const App = () => {
         </Routes>
 
 
-    </div>
+    </container>
   );
 };
 

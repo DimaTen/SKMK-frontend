@@ -21,24 +21,9 @@ const required = (value) => {
 
 const CheckIn = () => {
     const currentUser = AuthService.getCurrentUser();
-    const[email, setEmail] = useState('');
     const[username, setUsername] = useState('');
 
     const instructor = currentUser.username;
-
-
-
-    const [loading, setLoading] = useState(false);
-    const [message, setMessage] = useState("");
-    const [successful, setSuccessful] = useState(false);
-
-    const form = useRef();
-    const checkBtn = useRef();
-
-
-
-        
-  
 
 
     const handleCheckIn = (e) => {
@@ -62,8 +47,8 @@ const CheckIn = () => {
 
 
       return (
-        <div className="formContainer">
-            <form className="postForm" onSubmit={handleCheckIn}>
+        <div className="Content">
+            <form className="checkInForm" onSubmit={handleCheckIn}>
                 <label htmlFor="username">Username:</label>
                 <input
                     id="username"
@@ -72,9 +57,10 @@ const CheckIn = () => {
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                 />
-            
                 <button type="submit">Submit</button>
+
             </form>
+            
         </div>
 
 

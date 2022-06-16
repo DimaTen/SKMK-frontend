@@ -35,9 +35,7 @@ const Attendance = () => {
         }
       );
     }
-    fetchAttendance();
-    
-    
+    fetchAttendance();     
   }, []);
 
 
@@ -51,11 +49,9 @@ const Attendance = () => {
     setCheckInSearchResults(filteredResults.reverse());
 }, [checkedInList, checkInSearch])
 
-
-
   return (
-    <div>
-      <form className="searchForm" onSubmit={(e) => e.preventDefault()}>
+    <container className="Content">
+      <form className="filterForm" onSubmit={(e) => e.preventDefault()}>
         <label htmlFor="search">Search Posts</label>
         <input
             id="checkInSearch"
@@ -95,7 +91,7 @@ const Attendance = () => {
             
 
     </Table>
-    </div>
+    </container>
   )
 }
 

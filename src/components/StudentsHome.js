@@ -23,36 +23,38 @@ const StudentsHome = ({ users, search, setSearch, searchResults, setSearchResult
 
   
     return (
-      <main className='InstructorsPage'>
+      <main className='Content'>
         
-            <form className="searchForm" onSubmit={(e) => e.preventDefault()}>
+            <form className="filterForm" onSubmit={(e) => e.preventDefault()}>
                 <label htmlFor="search">Search Posts</label>
                 <input
                     id="search"
                     type="text"
-                    placeholder="Search Posts"
+                    placeholder="Search Student"
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                 />
             </form>
 
       {searchResults.map(student => (
-      <Accordion key={student.id} student={student} > 
-          <Accordion.Item eventKey="0">
-          <Accordion.Header>{student.firstname} {student.lastname}</Accordion.Header>
-          <Accordion.Body>
-          <Link to={`/students/student/${student.id}`}>
-                  <h3>Grade: {student.grade}</h3>
-                  <p>Username: {student.username} </p>
-                  <p>Email: {student.email}</p>
-                  <p>Phone: {student.phoneNumber}</p>
-                  <p>Password: {student.password}</p>
-                  
-          </Link>
-          </Accordion.Body>
-        </Accordion.Item>
-  
-      </Accordion>
+        <div className="accordion">
+          <Accordion key={student.id} student={student} > 
+              <Accordion.Item eventKey="0">
+              <Accordion.Header>{student.firstname} {student.lastname}</Accordion.Header>
+              <Accordion.Body>
+              <Link to={`/students/student/${student.id}`}>
+                      <h3>Grade: {student.grade}</h3>
+                      <p>Username: {student.username} </p>
+                      <p>Email: {student.email}</p>
+                      <p>Phone: {student.phoneNumber}</p>
+                      <p>Password: {student.password}</p>
+                      
+              </Link>
+              </Accordion.Body>
+            </Accordion.Item>
+      
+          </Accordion>
+        </div>
         ))}
      
 

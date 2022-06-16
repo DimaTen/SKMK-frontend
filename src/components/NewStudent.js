@@ -145,8 +145,8 @@ const NewStudent = () => {
   };
 
   return (
-    <div className="col-md-12">
-      <div className="card card-container">
+    <div className="Content">
+      <div className="card">
         <img
           src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
           alt="profile-img"
@@ -155,7 +155,7 @@ const NewStudent = () => {
 
         <Form onSubmit={handleRegister} ref={form}>
           {!successful && (
-            <div>
+            <div className="register-form">
               <div className="form-group">
                 <label htmlFor="username">Username</label>
                 <Input

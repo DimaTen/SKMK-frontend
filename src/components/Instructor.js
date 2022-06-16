@@ -33,8 +33,8 @@ const Instructor = ({ users, setUsers }) => {
     const instructor = users.find(instructor => (instructor.id).toString() === id);
 
   return (
-    <main className="PostPage">
-    <article className="post">
+    <main className="Content">
+
         {instructor &&
             <>
                 <h2>{instructor.firstname} {instructor.lastname}</h2>
@@ -60,7 +60,7 @@ const Instructor = ({ users, setUsers }) => {
                 </p>
             </>
         }
-    </article>
+
     </main>
 
   )

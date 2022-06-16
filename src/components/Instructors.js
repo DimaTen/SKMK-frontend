@@ -30,8 +30,8 @@ const Instructors = ({
     }, [users, search])
 
     return (
-        <main className="MainContent">
-            <form className="searchForm" onSubmit={(e) => e.preventDefault()}>
+        <main className="Content">
+            <form className="filterForm" onSubmit={(e) => e.preventDefault()}>
                 <label htmlFor="search">Search Posts</label>
                 <input
                     id="search"
